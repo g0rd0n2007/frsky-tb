@@ -1,2 +1,2 @@
-# frsky-tb
-FrSky Telemetry Box to read data from HobbyWing ESCs
+# FrSky Telemetry Box
+Read data from HobbyWing ESCs and send it via FrSky Smart Port to Your TX.
