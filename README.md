@@ -10,7 +10,7 @@ Communication details:
 - Normal logic
 
 Timechart:
-![serial_hobbywing](https://github.com/g0rd0n2007/frsky-tb/blob/main/Zrzut%20ekranu%20z%202023-10-01%2012-06-21.png)
+![Hobbywing](https://github.com/g0rd0n2007/frsky-tb/blob/main/Zrzut%20ekranu%20z%202023-10-01%2012-06-21.png)
 
 Frame with ID:
 |                | 1    | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   |
@@ -45,6 +45,9 @@ Communication details:
 - Little endian coding
 - bit duration: 17 us
 - Inverted logic
+
+Timechart:
+![Smart Port](https://github.com/g0rd0n2007/frsky-tb/blob/main/Zrzut%20ekranu%20z%202023-10-01%2012-18-04.png)
   
 Receiver pools sensor with:
 | Byte | 1    | 2         |
