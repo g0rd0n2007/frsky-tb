@@ -48,7 +48,9 @@ Communication details:
 
 Timechart:
 ![Smart Port](https://github.com/g0rd0n2007/frsky-tb/blob/main/Zrzut%20ekranu%20z%202023-10-01%2012-18-04.png)
-  
+
+* Connect MCU Tx Pin through 120 Ohm resistor.
+
 Receiver pools sensor with:
 | Byte | 1    | 2         |
 | ---- | ---- | --------- |
