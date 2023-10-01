@@ -7,6 +7,7 @@ Communication details:
 - Big endian coding
 - bit duration: 52 us
 - two types of frames sent: ID, data
+- Normal logic
 
 
 Frame with ID:
@@ -35,4 +36,62 @@ Voltage:
 Temp:
 - *C = Temp / 100
 
+## FrSky Smart Port
 
+Communication details:
+- 57 600 bps
+- Little endian coding
+- bit duration: 17 us
+- Inverted logic
+  
+Receiver pools sensor with:
+| Byte | 1    | 2         |
+| ---- | ---- | --------- |
+|      | 0x7e | sensor_id |
+
+If sensor is present - it answers with:
+| Byte | 1    | 2-3         | 4-7   | 8   |
+| ---- | ---- | ----------- | ----- | --- |
+|      | Head | Sensor type | Value | CRC |
+|      | 0x10 |             |       |     |
+
+Pooled sensor IDs:
+- 6A CB AC 0D 8E 2F D0 71 F2 53 34 95 16 B7 98 39 BA 1B 00 A1 22 83 E4 45 C6 67 48 E9
+
+Known sensor types:
+- RPM: 0x0500
+- A3 (Voltage): 0x0900
+- A4: 0x0910
+- Current: 0x0200
+- T1: 0x0400
+- T2: 0x0410
+- FLVV Cell sensor: 0x0300
+
+CRC Calculation code:
+```C
+uint8_t CalculateCRC(uint8_t bytes[], int len){
+  short crc = 0;
+  
+  for(int i=0;i<len;i++) {
+    crc += bytes[i]; //0-1FF
+    crc += crc >> 8;  //0-100
+    crc &= 0x00ff;
+    crc += crc >> 8;  //0-0FF
+    crc &= 0x00ff;
+  }
+  return ~crc;
+}
+```
+
+Bytes sequence imitating FLVV Cell sensor for 2S LiPo:
+- 0x10, 0x00, 0x03, 0x20, 0x2c, 0xc8, 0x82
+- First is the head
+- Sensor type is 0x0300,
+- 20 means:
+  - Total numbers of cells is 2
+  - Currently sent ID is 0
+    - For 4S battery there will be frames with ID=0 (Cell0=C0 and Cell1=C1) and ID=2 (Cell0 refers to C2 and Cell1 refers to C3)    
+- Two cells voltages are send using 24 + 24 bits.
+  - Cell0: 0x82c -> when read as float it refers to 4.2V
+  - Cell1: 0x82c
+- Transmitter will sum up all cells and show summed voltage  
