@@ -28,7 +28,7 @@ SerialConfiguration SerialConfigure(long speed, bool inv, int rx_pin, int tx_pin
   }
   if(tx_pin>=0) {
     pinMode(tx_pin, OUTPUT);
-    digitalWrite(tx_pin, LOW);
+    //digitalWrite(tx_pin, LOW);
   }
 
   return o;
