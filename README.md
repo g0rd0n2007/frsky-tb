@@ -30,13 +30,8 @@ Rx Thr, Out PWM:
 - 0-1023
   
 RPM:
--	Motor RPM = RPM_raw_data / No_of_pole_pairs
+-	Motor RPM = RPM_raw_data / No_of_pole_pairs (set it in TX)
 
-Voltage:
-- V = Voltage / 114
-  
-Temp:
-- *C = Temp / 100
 
 ## FrSky Smart Port
 
