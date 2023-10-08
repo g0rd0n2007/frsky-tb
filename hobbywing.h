@@ -17,13 +17,20 @@ typedef struct{
   float Current;
   unsigned int RPM;
   float T_FET, T;
+  int VoltageFactor;
 }HW_tData;
 
 HW_tData HW_Data;
 uint16_t HW_c0 = 0;
 
 bool HW_IsID(){
-  return HW.B[SerialBufSize-13]==0x9b && HW.B[SerialBufSize-12]==0x9b && HW.B[SerialBufSize-11]==0x03 && HW.B[SerialBufSize-1]==0xb9;
+  if(HW_Data.VoltageFactor==0){
+    if(HW.B[SerialBufSize-11]==0x02) HW_Data.VoltageFactor=21;
+    else if(HW.B[SerialBufSize-11]==0x03) HW_Data.VoltageFactor=11;
+  }
+  
+  return HW.B[SerialBufSize-13]==0x9b && HW.B[SerialBufSize-12]==0x9b && HW.B[SerialBufSize-1]==0xb9;
+  
 }
 
 bool HW_IsData(){
@@ -51,7 +58,7 @@ float HW_GetVoltage(){
   
   uint16_t v = (HW.B[SerialBufSize-8]<<8) | HW.B[SerialBufSize-7];
 
-  return ESCHW4_V_REF * v / ESCHW4_ADC_RES * 11;
+  return ESCHW4_V_REF * v / ESCHW4_ADC_RES * HW_Data.VoltageFactor;
 }
 
 float HW_GetCurrent(){
@@ -59,10 +66,17 @@ float HW_GetCurrent(){
 
   uint16_t HW_c = (HW.B[SerialBufSize-6]<<8) | HW.B[SerialBufSize-5];
   
-  if(HW_Data.RPM==0) HW_c0 = HW_c;
-
-  if (HW_c - HW_c0 < 0) return 0;
-  return (HW_c - HW_c0) * ESCHW4_V_REF / (ESCHW4_DIFFAMP_GAIN * ESCHW4_DIFFAMP_SHUNT * ESCHW4_ADC_RES);
+  if(
+    HW_Data.RxThr == 0
+    //HW_c > 0 && 
+    //(HW_c0 == 0 || HW_c0 < HW_c)
+  ) HW_c0 = HW_c;
+  
+  float c = HW_c - HW_c0;//0x161 1.468421 * HW_c - 50.67704;
+  
+  if (c < 0) return 0;
+  return c * ESCHW4_V_REF / (ESCHW4_DIFFAMP_GAIN * ESCHW4_DIFFAMP_SHUNT * ESCHW4_ADC_RES);
+  //() * 3.3 / (10 * (0.25/1000) * 4096) -> 0.3222
 }
 
 float CalcTemp(uint16_t t){
@@ -104,3 +118,22 @@ void HW_PrintData(bool deb){
     Serial.println();
   }
 }
+
+
+/*
+0 9B 0 2 59 1 2C 0 0 0 0 0 A D0 0 0 C B4 C CC 
+RxThr:29.33,OutPWM:0.00,RPM:0,Voltage:24.53,Current:0.00,T_FET:29.54,T:28.67
+0 9B 0 2 5B 1 2C 0 0 0 0 0 A D0 0 0 C B4 C CD 
+RxThr:29.33,OutPWM:0.00,RPM:0,Voltage:24.53,Current:0.00,T_FET:29.54,T:28.70
+0 9B 0 2 5C 1 2C 0 0 0 0 0 A D0 0 0 C B4 C CC 
+RxThr:48.97,OutPWM:1.96,RPM:0,Voltage:24.52,Current:353.00,T_FET:29.54,T:28.70
+0 9B 0 2 5E 1 F5 0 14 0 0 0 A CF 1 61 C B4 C CC 
+RxThr:48.97,OutPWM:3.62,RPM:855,Voltage:24.52,Current:353.00,T_FET:29.54,T:28.70
+0 9B 0 2 69 1 F5 0 25 0 3 57 A CF 1 61 C B4 C CC 
+RxThr:48.97,OutPWM:5.47,RPM:4334,Voltage:24.52,Current:353.00,T_FET:29.54,T:28.70
+0 9B 0 2 7E 1 F5 0 38 0 10 EE A CF 1 61 C B4 C CC 
+RxThr:48.97,OutPWM:5.77,RPM:4981,Voltage:24.52,Current:353.00,T_FET:29.54,T:28.70
+0 9B 0 2 81 1 F5 0 3B 0 13 75 A CF 1 61 C B4 C CC 
+RxThr:48.97,OutPWM:6.45,RPM:6494,Voltage:24.52,Current:353.00,T_FET:29.54,T:28.70
+
+*/

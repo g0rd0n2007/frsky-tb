@@ -20,6 +20,8 @@ void setup() {
 //  pinMode(SWITCH_PIN, INPUT);
 
   HW=SerialConfigure(19200, false, HW_PIN, -1);
+  HW_Data.VoltageFactor = 0;//Default setting
+
   SP=SerialConfigure(57600, true,  SP_rPIN, SP_tPIN);
 
   Serial.begin(115200);
@@ -74,9 +76,12 @@ void loop() {
 
     //0x9B   0x9B  0x03  0xE8  0x01  0x08  0x5B  0x00  0x01  0x00  0x21  0x21  0xB9
     if(HW_IsID()){
+      Serial.println("HW ID:");
+      PrintBuffer(HW, 0, SerialBufSize);
       for(int i=1;i<=13;i++)HW.B[SerialBufSize-i]=0;      
     }else if(HW_IsData()){
       HW_PrintData(true);
+      PrintBuffer(HW, 0, SerialBufSize);
       for(int i=1;i<=19;i++)HW.B[SerialBufSize-i]=0;
       break;
     }
@@ -92,8 +97,9 @@ void loop() {
 
     
     if(SP.B[SerialBufSize-2]==0x7e && SP.B[SerialBufSize-1]==0x00){
-      if(i==0) SP_Send(SP, FRSKY_SP_A3, HW_Data.Voltage*100.0);
-      if(i==1) SP_Send(SP, FRSKY_SP_CURR, HW_Data.Current*100.0);
+      
+      if(i==0) SP_Send(SP, FRSKY_SP_A3, HW_Data.Voltage*100.0f);
+      if(i==1) SP_Send(SP, FRSKY_SP_CURR, HW_Data.Current*100.0f);
       if(i==2) SP_Send(SP, FRSKY_SP_RPM, HW_Data.RPM);
       if(i==3) SP_Send(SP, FRSKY_SP_T1, HW_Data.T_FET);
       if(i==4) SP_Send(SP, FRSKY_SP_T2, HW_Data.T);
