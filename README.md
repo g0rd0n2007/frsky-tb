@@ -13,14 +13,10 @@ Telemetry box uses ESP32 board. Details:
 - GPIO33: It is SmartPort RX signal. It reads the line. Connect it to model's receiver SmartPort
 
 - GPIO14: It is SmartPort TX signal. It is used to transmit data to receiver's SmartPort. Use 120-220ohm resistor. After resistor - join it with GPIO33 and this needs to be bi-directional communication.
-  
-  
-  
+
   Pinout:
-  
+
   ![pinout.jpg](/images/pinout.jpg)
-  
-  
 
 ## HobbyWing ESC
 
@@ -35,15 +31,10 @@ Communication details:
   - Hobbywing signature frame (13 bytes)
   - Data frame (19-20bytes)
 - Logic: normal
-  
-  
 
 Timechart:
 
-
-![1.png](/home/dariusz-gogacz/Dokumenty/frsky-tb/images/1.png)
-
-
+![1.png](/images/1.png)
 
 ### Data frames
 
@@ -69,8 +60,6 @@ Length equal to 19-20 bytes.
 
 - 19: Optional. Present when motor is off. Equal to 0xB9
 
-
-
 Examples:
 
 |      | Start | Frame number | RX Throttle | Output PWM | RPM    | Voltage | Current | Temp1 | Temp2 | End  |
@@ -89,13 +78,9 @@ Examples:
 |      | 0x9B  | 0007E6       | 012C        | 0000       | 000000 | 0A49    | 0000    | 0C80  | 0C98  | 0xB9 |
 |      | 0x9B  | 0007E7       | 012C        | 0000       | 000000 | 0A48    | 0000    | 0C80  | 0C98  | 0xB9 |
 
-
-
 ### Signature frames
 
 Length equal to 13 bytes. But it sends two bytes 0x9B and my software sees it as 12 byte frame. I use 0x9B to trigger analysis and therefore I analyse 12 bytes.
-
-
 
 |                | Start | Start |      |      |      |      |      |      |      |      |      |      | End  |
 | -------------- | ----- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -105,8 +90,6 @@ Length equal to 13 bytes. But it sends two bytes 0x9B and my software sees it as
 | V5HV130A OPTO  | 0x9B  | 0x9B  | 0x03 | 0xE8 | 0x01 | 0x0B | 0x41 | 0x21 | 0x44 | 0xB9 | 0x21 | 0x21 | 0xB9 |
 | HW HV 200A     | 0x9B  | 0x9B  | 0x02 | 0xD0 | 0x01 | 0x0B | 0x41 | 0x21 | 0x7E | 0x62 | 0x21 | 0x21 | 0xB9 |
 | HW 120A        | 0x9B  | 0x9B  | 0x03 | 0xE8 | 0x01 | 0x08 | 0x5B | 0x21 | 0x71 | 0x6E | 0x21 | 0x21 | 0xB9 |
-
-
 
 ## FrSky Smart Port
 
@@ -118,7 +101,7 @@ Communication details:
 - Inverted logic
 
 Timechart:
-![Smart Port](https://github.com/g0rd0n2007/frsky-tb/blob/main/Zrzut%20ekranu%20z%202023-10-01%2012-18-04.png)
+![Smart Port](/images/2.png)
 
 * Connect MCU Tx Pin through 120 Ohm resistor.
 
