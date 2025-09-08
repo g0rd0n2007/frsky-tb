@@ -101,6 +101,8 @@ Communication details:
 - Inverted logic
 
 Timechart:
+
+
 ![Smart Port](/images/2.png)
 
 * Connect MCU Tx Pin through 120 Ohm resistor.
@@ -158,8 +160,6 @@ uint8_t CalculateCRC(uint8_t bytes[], int len){
 ### FLVV Cell sensor
 
 Bytes sequence imitating FLVV Cell sensor for 2S LiPo:
-
-
 
 - Sequence: 0x10, 0x00, 0x03, 0x20, 0x2c, 0xc8, 0x82
 - First is the head
