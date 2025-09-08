@@ -74,6 +74,7 @@ void decodeHwFrame(uint8_t* buf, uint8_t len) {
   if (len < 10) return; // minimalna długość ramki
 
   //printFrame("[HW Frame]", buf, len);
+  float v;
 
   uint32_t frame_id = U24(1);
   uint16_t rx_thr = U16(4);
@@ -82,7 +83,8 @@ void decodeHwFrame(uint8_t* buf, uint8_t len) {
   OutPWM = out_pwm_raw / 10.0;
 
   uint32_t rpm_raw = U24(8);
-  RPM = rpm_raw;
+  //Daje to 3000obr/min dla 5pp i przełożenia 1:10
+  if(0 <= rpm_raw && rpm_raw <= 150000) RPM = rpm_raw;
 
   uint16_t voltage_raw = U16(11);
   uint16_t current_raw = U16(13);
@@ -99,15 +101,20 @@ void decodeHwFrame(uint8_t* buf, uint8_t len) {
   }
 
   if((current_raw - CurrentOffset) > 0 && HobbywingSignatureIdx>=0){
-    Current = (current_raw - CurrentOffset) * Signatures[HobbywingSignatureIdx].CurrentFactor;
+    v = (current_raw - CurrentOffset) * Signatures[HobbywingSignatureIdx].CurrentFactor;
   }else{
-    Current = 0.0;
+    v = 0.0;
   }
+  if(0 <= v && v <= 500.0f) Current = v;
+
 
   uint8_t temp1 = U16(15);  
+  v = calcTemp(temp1);
+  if(0 <= v && v <= 300.0f) Temp1 = v;
+
   uint8_t temp2 = U16(17);  
-  if(temp1 > 0) Temp1 = calcTemp(temp1);
-  if(temp2 > 0) Temp2 = calcTemp(temp2);
+  v = calcTemp(temp2);
+  if(0 <= v && v <= 300.0f) Temp2 = v;
   
   char msg[256] = "";
   snprintf(msg, sizeof(msg),
@@ -268,28 +275,28 @@ void loop() {
             digitalWrite(LED_PIN, HIGH);
           }*/
         } 
-        if(frskyFrame[1]==0xa1 && 0 <= Temp1 && Temp1 <= 300.0f){
+        if(frskyFrame[1]==0xa1){
           sendToSmartPort(0x0400, Temp1);//Temp1
           /*else {
             Serial.printf("[FrSky] 0xa1 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0x22 && 0 <= Temp2 && Temp2 <= 300.0f){
+        if(frskyFrame[1]==0x22){
           sendToSmartPort(0x0410, Temp2);//Temp1)
           /*else {
             Serial.printf("[FrSky] 0x22 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0x83 && 0 <= RPM && RPM <= 150000){//Daje to 3000obr/min dla 5pp i przełożenia 1:10
+        if(frskyFrame[1]==0x83){
           sendToSmartPort(0x0500, RPM);//RPM
           /*else {
             Serial.printf("[FrSky] 0x83 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0xe4 && 0 <= Current && Current <= 500.0f){
+        if(frskyFrame[1]==0xe4){
           sendToSmartPort(0x0200, Current);//Current
           /*else {
             Serial.printf("[FrSky] 0xe4 zajęte\n");
