@@ -268,28 +268,28 @@ void loop() {
             digitalWrite(LED_PIN, HIGH);
           }*/
         } 
-        if(frskyFrame[1]==0xa1){
+        if(frskyFrame[1]==0xa1 && 0 <= Temp1 && Temp1 <= 300.0f){
           sendToSmartPort(0x0400, Temp1);//Temp1
           /*else {
             Serial.printf("[FrSky] 0xa1 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0x22){
+        if(frskyFrame[1]==0x22 && 0 <= Temp2 && Temp2 <= 300.0f){
           sendToSmartPort(0x0410, Temp2);//Temp1)
           /*else {
             Serial.printf("[FrSky] 0x22 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0x83){
+        if(frskyFrame[1]==0x83 && 0 <= RPM && RPM <= 150000){//Daje to 3000obr/min dla 5pp i przełożenia 1:10
           sendToSmartPort(0x0500, RPM);//RPM
           /*else {
             Serial.printf("[FrSky] 0x83 zajęte\n");
             digitalWrite(LED_PIN, HIGH);
           }*/
         }
-        if(frskyFrame[1]==0xe4){
+        if(frskyFrame[1]==0xe4 && 0 <= Current && Current <= 500.0f){
           sendToSmartPort(0x0200, Current);//Current
           /*else {
             Serial.printf("[FrSky] 0xe4 zajęte\n");
