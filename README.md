@@ -13,9 +13,9 @@ Telemetry box uses ESP32 board. Details:
 - GPIO33: It is SmartPort RX signal. It reads the line. Connect it to model's receiver SmartPort
 
 - GPIO14: It is SmartPort TX signal. It is used to transmit data to receiver's SmartPort. Use 120-220ohm resistor. After resistor - join it with GPIO33 and this needs to be bi-directional communication.
-
+  
   Pinout:
-
+  
   ![pinout.jpg](/images/pinout.jpg)
 
 ## HobbyWing ESC
@@ -106,17 +106,25 @@ Timechart:
 * Connect MCU Tx Pin through 120 Ohm resistor.
 
 Receiver pools sensor with:
-| Byte | 1    | 2         |
-| ---- | ---- | --------- |
-|      | 0x7e | sensor_id |
+
+
+
+
+| Byte  | 0    | 1        |
+| ----- | ---- | -------- |
+| Value | 0x7E | SensorID |
 
 If sensor is present - it answers with:
-| Byte | 1    | 2-3         | 4-7   | 8   |
+
+
+
+
+| Byte | 0    | 1-2         | 3-6   | 7   |
 | ---- | ---- | ----------- | ----- | --- |
 |      | Head | Sensor type | Value | CRC |
 |      | 0x10 |             |       |     |
 
-Pooled sensor IDs:
+Pooled SensorIDs:
 
 - 6A CB AC 0D 8E 2F D0 71 F2 53 34 95 16 B7 98 39 BA 1B 00 A1 22 83 E4 45 C6 67 48 E9
 
@@ -147,9 +155,13 @@ uint8_t CalculateCRC(uint8_t bytes[], int len){
 }
 ```
 
+### FLVV Cell sensor
+
 Bytes sequence imitating FLVV Cell sensor for 2S LiPo:
 
-- 0x10, 0x00, 0x03, 0x20, 0x2c, 0xc8, 0x82
+
+
+- Sequence: 0x10, 0x00, 0x03, 0x20, 0x2c, 0xc8, 0x82
 - First is the head
 - Sensor type is 0x0300,
 - 20 means:
