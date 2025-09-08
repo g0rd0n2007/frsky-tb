@@ -2,6 +2,10 @@
 
 Read data from HobbyWing ESCs and send it via FrSky Smart Port to Your TX.
 
+
+
+![](/images/3.jpg)
+
 ## ESP32 Board
 
 Telemetry box uses ESP32 board. Details:
@@ -102,24 +106,17 @@ Communication details:
 
 Timechart:
 
-
 ![Smart Port](/images/2.png)
 
 * Connect MCU Tx Pin through 120 Ohm resistor.
 
 Receiver pools sensor with:
 
-
-
-
 | Byte  | 0    | 1        |
 | ----- | ---- | -------- |
 | Value | 0x7E | SensorID |
 
 If sensor is present - it answers with:
-
-
-
 
 | Byte | 0    | 1-2         | 3-6   | 7   |
 | ---- | ---- | ----------- | ----- | --- |
