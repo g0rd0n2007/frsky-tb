@@ -2,8 +2,6 @@
 
 Read data from HobbyWing ESCs and send it via FrSky Smart Port to Your TX.
 
-
-
 ![](/images/3.jpg)
 
 ## ESP32 Board
