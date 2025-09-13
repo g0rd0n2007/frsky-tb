@@ -11,8 +11,8 @@ struct Signature {
   Range Voltage[20];
 };
 
-Signature Signatures[] = {                                                                   //3.10, 2.58
-  {{0x9b,	0x02,	0xd0,	0x01,	0x0b,	0x41,	0x21,	0x7e,	0x62,	0x21,	0x21,	0xb9}, "Hobbywing 200A", 2.45f, {
+Signature Signatures[] = {                                                                   //4.27f, 2.45, 3.10, 2.58
+  {{0x9b,	0x02,	0xd0,	0x01,	0x0b,	0x41,	0x21,	0x7e,	0x62,	0x21,	0x21,	0xb9}, "Hobbywing 200A", 3.66f, {
     {0, 58.0}
   }},//                                                                                        3.10, 2.58
   {{0x9b,	0x03,	0xe8,	0x01,	0x08,	0x5b,	0x21,	0x71,	0x6e,	0x21,	0x21,	0xb9}, "Hobbywing 120A", 2.45f, {
